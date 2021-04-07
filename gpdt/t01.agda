@@ -33,3 +33,13 @@ data Vec (A : Set) : ℕ → Set where
 repeat : ∀ {n} {A} → A → Vec A n
 repeat { zero } x = []
 repeat { suc n } x = x :: repeat x
+
+eq-bool : Bool → Bool → Bool
+eq-bool true true = true
+eq-bool false false = true
+eq-bool _ _ = false
+
+eq-nat : ℕ → ℕ → Bool
+eq-nat zero zero = true
+eq-nat (suc n) (suc m) = eq-nat m n
+eq-nat _ _ = false
