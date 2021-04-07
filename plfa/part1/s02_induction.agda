@@ -16,3 +16,26 @@ _ =
   ≡⟨⟩
     3 + (4 + 5)
   ∎
+
+_ : (3 + 4) + 5 ≡ 3 + (4 + 5)
+_ = 12 ∎
+
++-assoc : ∀ (m n p : ℕ) → (m + n) + p ≡ m + (n + p)
++-assoc zero n p = 
+    begin
+      (zero + n) + p
+    ≡⟨⟩
+      n + p
+    ≡⟨⟩
+      zero + (n + p)
+    ∎
++-assoc (suc m) n p = 
+    begin
+      (suc m + n) + p
+    ≡⟨⟩
+      suc ((m + n) + p)
+    ≡⟨ cong suc (+-assoc m n p) ⟩
+      suc (m + (n + p))
+    ≡⟨⟩
+      suc m + (n + p)
+    ∎
