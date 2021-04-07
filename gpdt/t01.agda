@@ -1,6 +1,6 @@
 data Bool : Set where
     true : Bool
-    false : Bool 
+    false : Bool
 
 ¬ : Bool → Bool
 ¬ true = false
@@ -9,3 +9,7 @@ data Bool : Set where
 _∧_ : Bool → Bool → Bool
 true ∧ true = true
 _ ∧ _ = false
+
+if_then_else : Bool → Bool → Bool → Bool
+if true then a1 else a2 = a1
+if false then a1 else a2 = a2
