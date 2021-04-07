@@ -10,6 +10,6 @@ _∧_ : Bool → Bool → Bool
 true ∧ true = true
 _ ∧ _ = false
 
-if_then_else : Bool → Bool → Bool → Bool
+if_then_else : ∀ {A} → oral → A → A → A
 if true then a1 else a2 = a1
 if false then a1 else a2 = a2
