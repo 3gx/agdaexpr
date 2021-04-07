@@ -54,3 +54,63 @@ _ = 12 ∎
     ≡⟨⟩
       2 + (n + p)
     ∎
+
+-- first lemma: m + 0 == m
++-id : ∀ (m : ℕ) → m + zero ≡ m
++-id zero = 
+    begin
+        zero + zero
+    ≡⟨⟩
+        zero
+    ∎
++-id (suc m) =
+    begin
+        suc m + zero
+    ≡⟨⟩
+        suc (m + zero)
+    ≡⟨ cong suc (+-id m)  ⟩
+      suc m
+    ∎
+
+-- second lemma: suc m + n == suc (m + n)
++-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
++-suc zero n =
+    begin
+        zero + suc n
+    ≡⟨⟩
+        suc n
+    ≡⟨⟩
+        suc (zero + n)
+    ∎
++-suc (suc m) n =
+    begin
+        suc m + suc n
+    ≡⟨⟩
+        suc (m + suc n)
+    ≡⟨ cong suc (+-suc m n) ⟩
+        suc (suc (m + n))
+    ≡⟨⟩
+        suc (suc m + n)
+    ∎
+
+-- the proposition: m + n == n + m
++-comm : ∀ (m n : ℕ) → m + n ≡ n + m
++-comm m zero = 
+    begin
+        m + zero
+    ≡⟨ (+-id m) ⟩
+        m
+    ≡⟨⟩
+        zero + m
+    ∎
++-comm m (suc n) =
+    begin
+        m + (suc n)
+    ≡⟨ +-suc m n ⟩
+        suc (m + n)
+    ≡⟨ cong suc (+-comm m n) ⟩
+        suc (n + m)
+    ≡⟨⟩
+        suc n + m
+    ∎
+
