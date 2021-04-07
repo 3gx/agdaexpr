@@ -39,3 +39,18 @@ _ = 12 ∎
     ≡⟨⟩
       suc m + (n + p)
     ∎
+
++-assoc-2 : ∀ (n p : ℕ) → (2 + n) + p ≡ 2 + (n + p)
++-assoc-2 n p = 
+    begin
+        (2 + n) + p
+    ≡⟨⟩
+        suc (1 + n) + p
+    ≡⟨⟩
+        suc ((1 + n) + p)
+    -- ≡⟨⟩ -- also works
+    ≡⟨ cong suc (+-assoc 1 n p) ⟩
+      suc (1 + (n + p))
+    ≡⟨⟩
+      2 + (n + p)
+    ∎
