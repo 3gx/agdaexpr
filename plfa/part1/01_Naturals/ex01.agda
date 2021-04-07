@@ -5,9 +5,13 @@ data NN : Set where
 -- zero
 -- suc zero
 
+-- _+_ : NN → NN → NN
+-- zero + n = n
+-- (suc m) + n  = suc (m + n)
+
 _+_ : NN → NN → NN
 zero + n = n
-(suc m) + n  = suc (m + n)
+suc m + n = (suc (m + n))
 
 _*_ : NN → NN → NN
 zero * n = zero
