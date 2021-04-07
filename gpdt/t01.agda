@@ -10,8 +10,6 @@ _∧_ : Bool → Bool → Bool
 true ∧ true = true
 _ ∧ _ = false
 
-{-
-if_then_else : ∀ {A} → Bool → A → A → A
+if_then_else : ∀ {A : Set} → Bool → A → A → A
 if true then a1 else a2 = a1
 if false then a1 else a2 = a2
--}
