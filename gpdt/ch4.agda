@@ -54,3 +54,27 @@ none = inj₁ tt
 
 some : ∀ {A} → A → Option A
 some a = inj₂ a
+
+data μ : (Set → Set) → Set where
+    roll : ∀ {A} → A (μ A) → μ A
+
+unroll : ∀ {A} → μ A → A (μ A)
+unroll (roll x) = x
+
+Nat : Set
+Nat = μ (λ A → ⊤ ⊎ A)
+
+zilch : Nat
+zilch = roll (inj₁ tt)
+
+succ : Nat → Nat
+succ x = roll (inj₂ x)
+
+MyList : Set → Set
+MyList A =  μ (λ B → ⊤ ⊎ (A × B))
+
+nil : ∀ {A} → MyList A
+nil = roll (inj₁ tt)
+
+cons : ∀ {A} → A → MyList A → MyList A
+cons x xs = roll (inj₂ (x , xs))
