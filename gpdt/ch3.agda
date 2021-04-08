@@ -52,4 +52,5 @@ _ : nvec-map (suc zero) {Bool :: (Bool :: [])} (λ x → ¬ x)
                               (true :: (false :: [])) ≡ 
                               (false :: (true :: []))
 _ = refl
-                          
+
+-- 3.2 - A curried vector map
