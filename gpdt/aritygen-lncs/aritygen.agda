@@ -5,7 +5,8 @@
 module aritygen where
 
 open import Data.Nat
-open import Data.Vec hiding (_∈_; _⊛_)
+open import Data.Vec hiding (_⊛_; transpose)
+-- hiding (_∈_; _⊛_)
 open import Data.Unit
 open import Data.Product
 open import Data.Sum
@@ -19,12 +20,14 @@ infixl 50 _⊛_
 ∀⇒ : {n : ℕ} {A : Set} → (Vec A n → Set) → Set
 ∀⇒ {zero}       B = B []
 ∀⇒ {suc n} {A}  B = {a : A} → ∀⇒ {n} (\ as → B (a ∷ as))
-  
+
+ {-
 --- curry
 \⇒  : {n : ℕ} {A : Set} {B : Vec A n → Set} 
     → ((X : Vec A n) → B X) → (∀⇒ B)
 \⇒ {zero}       f = f []
 \⇒ {suc n} {A}  f = \ {a : A} → \⇒ {n} (\ as → f (a ∷ as)) 
+-}
 
 -- uncurry
 /⇒ : (n : ℕ) → {K : Set}{B : Vec K n → Set} 
@@ -277,6 +280,7 @@ nLookup (VS x) (NCons a _ nge) =
 MuGen : (n : ℕ) → (Vec Set (suc n) → Set) → Set
 MuGen n b = ∀ {A} → b (A ⊛ (repeat μ ⊛ A)) → b (repeat μ ⊛ A)
 
+{-
 ngen-open : {n : ℕ}{b : Vec Set (suc n) → Set}{G : Ctx} {k : Kind} → 
              (t : Typ G k) → (ve : NGEnv b G) → 
              (ce : ConstEnv b) → MuGen n b →
@@ -302,3 +306,4 @@ ngen : {n : ℕ}{b : Vec Set (suc n) → Set}{k : Kind} →
        (t : Ty k) → (ConstEnv b) → MuGen n b → b ⟨ k ⟩ (repeat ⌊ t ⌋)
 ngen{n}{b}{k} t ce d = ≡-KIT {n}{b}{k} c7 (ngen-open t NNil ce d)
 
+-}
