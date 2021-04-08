@@ -40,11 +40,16 @@ map2' : {m : ℕ} { A B C : Set} → arrTy (A :: (B :: (C :: [])))
                                → arrTyVec m (A :: (B :: (C :: [])))
 map2' f x y = repeat f ⊛ x ⊛ y
 
-nvec-map : {m : ℕ} (n : ℕ) → {As : Vec Set (suc n)}
+nvec-map : {m : ℕ} → (n : ℕ) → {As : Vec Set (suc n)}
                            → arrTy As → arrTyVec m As
 nvec-map n f = g n (repeat f) where
     g : {m : ℕ} → (n : ℕ) -> {As : Vec Set (suc n)}
                 → Vec (arrTy As) m → arrTyVec m As
     g zero {A :: []} a = a
     g (suc n) {A :: As} f = (λ a → g n (f ⊛ a))
+
+_ : nvec-map (suc zero) {Bool :: (Bool :: [])} (λ x → ¬ x)
+                              (true :: (false :: [])) ≡ 
+                              (false :: (true :: []))
+_ = refl
                           
