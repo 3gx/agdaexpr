@@ -8,7 +8,9 @@ open import Data.Product -- imports ×
 open import Data.Sum -- imports ⊎
 open import Data.Bool
 open import Data.List
--- open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality
+-- import Relation.Binary.PropositionalEquality as Eq
+-- open Eq using (_≡_; refl; cong; sym)
 
 Choice : Set → Set → Set
 Choice = λ A B → (A × B) ⊎ (A ⊎ (B ⊎ ⊤))
@@ -149,3 +151,12 @@ interp (Mu t) e = μ (interp t e)
 
 ⌊_⌋ : ∀ {k} → Ty k → ⟦ k ⟧
 ⌊ t ⌋ = interp t []
+
+list : Ty (⋆ ⇒ ⋆)
+list = 
+    Lam( Mu (Lam
+         (App (App (Con Sum) (Con Unit))
+         (App (App (Con Prod) (Var (VS VZ))) (Var VZ)))))
+
+_ : ⌊ list ⌋ ≡ MyList
+_ = refl
