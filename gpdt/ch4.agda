@@ -121,3 +121,21 @@ data Typ : Ctx → Kind → Set where
     Con  : ∀ {Γ k} → Const k → Typ Γ k
     Mu : ∀ {Γ} → Typ Γ (⋆ ⇒ ⋆) → Typ Γ ⋆
 
+Ty : Kind → Set
+Ty = Typ []
+
+⟦_⟧ : Kind → Set
+⟦ ⋆ ⟧ = Set
+⟦ a ⇒ b ⟧ = ⟦ a ⟧ → ⟦ b ⟧
+
+C⟦_⟧ : ∀ {k} → Const k → ⟦ k ⟧
+C⟦ Unit ⟧ = ⊤  -- has kind Set
+C⟦ Sum ⟧ = _⊎_ -- has kind Set → Set → Set
+C⟦ Prod ⟧ = _×_
+
+data Env : Ctx → Set where
+    [] : Env []
+    _∷_ : ∀ {k G} → ⟦ k ⟧ → Env G → Env (k ∷ G)
+sLookup : ∀ {k G} → V G k → Env G → ⟦ k ⟧
+sLookup VZ (v ∷ G) = v
+sLookup (VS x) (v ∷ G) = sLookup x G
