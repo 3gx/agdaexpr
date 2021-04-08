@@ -11,7 +11,7 @@ open import Data.List
 -- open import Relation.Binary.PropositionalEquality
 
 Choice : Set → Set → Set
-Choice = λ A B → (A × B) ⊎ A ⊎ B ⊎ ⊤
+Choice = λ A B → (A × B) ⊎ (A ⊎ (B ⊎ ⊤))
 
 eq-list : ∀ {A} → (A → A → Bool) → List A → List A → Bool
 eq-list f [] [] = true
