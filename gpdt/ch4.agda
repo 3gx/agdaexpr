@@ -139,3 +139,13 @@ data Env : Ctx → Set where
 sLookup : ∀ {k G} → V G k → Env G → ⟦ k ⟧
 sLookup VZ (v ∷ G) = v
 sLookup (VS x) (v ∷ G) = sLookup x G
+
+interp : ∀ {G k} → Typ G k → Env G → ⟦ k ⟧
+interp (Var x) e = sLookup x e
+interp (Lam t) e = λ y → interp t (y ∷ e)
+interp (App t1 t2) e = (interp t1 e) (interp t2 e)
+interp (Con c) e = C⟦ c ⟧
+interp (Mu t) e = μ (interp t e)
+
+⌊_⌋ : ∀ {k} → Ty k → ⟦ k ⟧
+⌊ t ⌋ = interp t []
