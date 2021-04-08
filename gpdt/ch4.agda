@@ -70,6 +70,12 @@ zilch = roll (inj₁ tt)
 succ : Nat → Nat
 succ x = roll (inj₂ x)
 
+one : Nat
+one = succ zilch
+
+two : Nat
+two = succ one
+
 MyList : Set → Set
 MyList A =  μ (λ B → ⊤ ⊎ (A × B))
 
@@ -88,3 +94,4 @@ vnil = tt
 
 vcons : ∀ {n} {A} → A → MyVec A n → MyVec A (suc n)
 vcons x xs = (x , xs)
+
