@@ -95,3 +95,15 @@ vnil = tt
 vcons : ∀ {n} {A} → A → MyVec A n → MyVec A (suc n)
 vcons x xs = (x , xs)
 
+
+infixr 50 _⇒_
+data Kind : Set where
+    ⋆ : Kind
+    _⇒_ : Kind → Kind → Kind
+
+data Const : Kind → Set where
+    Unit : Const ⋆
+    Sum : Const (⋆ ⇒ ⋆ ⇒ ⋆)
+    Prod : Const (⋆ ⇒ ⋆ ⇒ ⋆)
+
+
