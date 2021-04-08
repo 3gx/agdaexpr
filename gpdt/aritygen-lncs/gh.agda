@@ -4,7 +4,8 @@
 module gh where
 
 open import Data.Nat
-open import Data.Vec hiding (_∈_)
+open import Data.Vec 
+-- hiding (_∈_)
 open import Data.Unit
 open import Data.Product
 open import Data.Sum
