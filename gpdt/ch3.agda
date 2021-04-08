@@ -1,5 +1,7 @@
 {-# OPTIONS --type-in-type #-}
 
+import Relation.Binary.PropositionalEquality as Eq
+open Eq using (_≡_; refl; cong; sym)
 open import ch2
 
 map0 : { m : ℕ } { A : Set } → A → Vec A m
@@ -19,3 +21,21 @@ map2 f x y = repeat f ⊛ x ⊛ y
 arrTy : { n : ℕ } → Vec Set (suc n) → Set
 arrTy {zero} (A :: []) = A
 arrTy {suc n} (A :: As) = A → arrTy As
+
+-- _ : arrTy (ℕ :: (ℕ :: [])) ≡ ℕ → ℕ
+-- _ = refl
+
+arrTyVec : {n : ℕ} → ℕ → Vec Set (suc n) → Set
+arrTyVec m As = arrTy (repeat (λ A → Vec A m) ⊛ As)
+
+
+map0' : { m : ℕ } { A : Set } → arrTy (A :: []) → arrTyVec m ( A :: [])
+map0' = repeat
+
+map1' : {m : ℕ} { A B : Set} → arrTy (A :: (B :: [])) 
+                             → arrTyVec m (A :: (B :: []))
+map1' f x = repeat f ⊛ x
+
+map2' : {m : ℕ} { A B C : Set} → arrTy (A :: (B :: (C :: []))) 
+                               → arrTyVec m (A :: (B :: (C :: [])))
+map2' f x y = repeat f ⊛ x ⊛ y
