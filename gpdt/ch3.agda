@@ -57,17 +57,31 @@ _ = refl
 
 -- 3.2 - A curried vector map
 
+{-
+v∀⇒ : {n : ℕ}  
+    -> (Vec Set n -> Set) 
+    -> Set
+v∀⇒ {ℕ.zero}       B = B []
+v∀⇒ {ℕ.suc n} B = ∀ {x} -> v∀⇒ (λ xs -> B (x :: xs))
+
+vλ⇒ : {n : ℕ} {B : (_ : Vec Set n) -> Set} 
+    -> ((xs : Vec Set n) -> B xs) 
+    -> v∀⇒ B
+vλ⇒ {ℕ.zero}       f = f []
+vλ⇒ {ℕ.suc n} f = λ {x} -> vλ⇒ (λ xs -> f (x :: xs))
+-}
+
+{-
 ∀⇒ : {n : ℕ} → ((_ : Vec Set n) → Set) → Set
 ∀⇒ {zero} B = B []
-∀⇒ {suc n} B = {a : Set} → ∀⇒ (λ as → B (a :: as))
+∀⇒ {suc n} B = {a : Set} → ∀⇒ {_} (λ as → B (a :: as))
 
-{- 
-λ⇒ : {n : ℕ} → {B : (_ : Vec Set n) → Set}
+λ⇒ : {n : ℕ} {B : (_ : Vec Set n) → Set}
              → ({X : Vec Set n} → B X) → (∀⇒ {n} B)
-λ⇒ {zero} f = f {[]}
+λ⇒ {zero} {_} f = f {[]}
 
 -- the following case doesn't typecheck ;(
-λ⇒ {suc n} f = λ {a : Set} → λ⇒ {n} (λ {as} → f {a :: as})
+λ⇒ {suc n} {_} f = λ {a : Set} → λ⇒ {n} (λ {as} → f {a :: as})
 -- λ⇒ {suc n} f = λ {a : Set} → λ⇒ {n} (λ {as} → f {a :: as})
 -}
 
