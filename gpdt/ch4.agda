@@ -45,3 +45,12 @@ mytrue = inj₁ tt
 
 myfalse : MyBool
 myfalse = inj₂ tt
+
+Option : Set → Set
+Option = λ A → ⊤ ⊎ A
+
+none : ∀ {A} → Option A
+none = inj₁ tt
+
+some : ∀ {A} → A → Option A
+some a = inj₂ a
