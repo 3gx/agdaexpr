@@ -166,3 +166,11 @@ myvec n = Lam (f n) where
     f : ℕ → Typ (⋆ ∷ []) ⋆
     f 0 = Con Unit
     f (suc n) = App (App (Con Prod) (Var VZ)) (f n)
+
+_ : ⌊ myvec 4 ⌋ ℕ ≡ MyVec ℕ 4
+_ = refl
+
+{- doesn't typecheck
+_ : ⌊ myvec 4 ⌋ ≡ ∀ {A} → MyVec A 4
+_ = refl
+-}
