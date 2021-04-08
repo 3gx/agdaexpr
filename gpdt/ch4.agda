@@ -36,3 +36,12 @@ arb-bool : Bool
 arb-list : ∀ {A} → A → List A
 arb-choice : ∀ {A B} → A → B → Choice A B
 -}
+
+MyBool : Set
+MyBool = ⊤ ⊎ ⊤
+
+mytrue : MyBool
+mytrue = inj₁ tt
+
+myfalse : MyBool
+myfalse = inj₂ tt
