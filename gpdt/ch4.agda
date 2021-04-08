@@ -106,4 +106,18 @@ data Const : Kind → Set where
     Sum : Const (⋆ ⇒ ⋆ ⇒ ⋆)
     Prod : Const (⋆ ⇒ ⋆ ⇒ ⋆)
 
+data Ctx : Set where
+    [] : Ctx
+    _∷_ : Kind → Ctx → Ctx
+
+data V : Ctx → Kind → Set where
+    VZ : ∀ {Γ k} → V (k ∷ Γ) k
+    VS : ∀ {Γ k' k} → V Γ k → V (k' ∷ Γ) k
+
+data Typ : Ctx → Kind → Set where
+    Var : ∀ {Γ k} → V Γ k → Typ Γ k
+    Lam : ∀ {Γ k₁ k₂} → Typ (k₁ ∷ Γ) k₂ → Typ Γ (k₁ ⇒ k₂)
+    App : ∀ {Γ k₁ k₂} → Typ Γ (k₁ ⇒ k₂) → Typ Γ k₁ → Typ Γ k₂
+    Con  : ∀ {Γ k} → Const k → Typ Γ k
+    Mu : ∀ {Γ} → Typ Γ (⋆ ⇒ ⋆) → Typ Γ ⋆
 

@@ -246,8 +246,8 @@ gcount = gen gcount-c gcount-mu where
      gcount-sum ra rb (inj₁ x) = ra x 
      gcount-sum ra rb (inj₂ x) = rb x
   gcount-c Prod = gcount-prod where
-     -- gcount-prod : ∀ { A } → _ → ∀ { B } → _ → (A × B) → ℕ
      gcount-prod : ∀ { A } → (A → ℕ) → ∀ { B } → (B → ℕ) → (A × B) → ℕ
+     -- gcount-prod : ∀ { A } → _ → ∀ { B } → _ → (A × B) → ℕ
      gcount-prod ra rb ( x₁ , x₂ ) = ra x₁ + rb  x₂
 
   gcount-mu : MuGen Count
