@@ -1,3 +1,5 @@
+{-# OPTIONS --type-in-type #-}
+
 open import ch2
 
 map0 : { m : ℕ } { A : Set } → A → Vec A m
@@ -13,3 +15,7 @@ map1 f x = repeat f ⊛ x
 
 map2 : {m : ℕ} {A B C : Set} → (A → B → C) → Vec A m → Vec B m → Vec C m
 map2 f x y = repeat f ⊛ x ⊛ y
+
+arrTy : { n : ℕ } → Vec Set (suc n) → Set
+arrTy {zero} (A :: []) = A
+arrTy {suc n} (A :: As) = A → arrTy As
