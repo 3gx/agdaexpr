@@ -153,7 +153,7 @@ interp (Mu t) e = μ (interp t e)
 ⌊ t ⌋ = interp t []
 
 list : Ty (⋆ ⇒ ⋆)
-list = 
+list =
     Lam( Mu (Lam
          (App (App (Con Sum) (Con Unit))
          (App (App (Con Prod) (Var (VS VZ))) (Var VZ)))))
@@ -174,3 +174,8 @@ _ = refl
 _ : ⌊ myvec 4 ⌋ ≡ ∀ {A} → MyVec A 4
 _ = refl
 -}
+
+_⟨_⟩_ : (Set → Set) → (k : Kind) → ⟦ k ⟧ → Set
+b ⟨ ⋆ ⟩ t = b t
+b ⟨ k1 ⇒ k2 ⟩ t = ∀ {A} → b ⟨ k1 ⟩ A → b ⟨ k2 ⟩ (t A)
+
