@@ -78,3 +78,13 @@ nil = roll (inj₁ tt)
 
 cons : ∀ {A} → A → MyList A → MyList A
 cons x xs = roll (inj₂ (x , xs))
+
+MyVec : Set → ℕ → Set
+MyVec A 0 = ⊤
+MyVec A (suc n) = A × MyVec A n
+
+vnil : ∀ {A} → MyVec A 0
+vnil = tt
+
+vcons : ∀ {n} {A} → A → MyVec A n → MyVec A (suc n)
+vcons x xs = (x , xs)
