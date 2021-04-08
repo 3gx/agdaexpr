@@ -160,3 +160,9 @@ list =
 
 _ : ⌊ list ⌋ ≡ MyList
 _ = refl
+
+myvec : ℕ → Ty (⋆ ⇒ ⋆)
+myvec n = Lam (f n) where
+    f : ℕ → Typ (⋆ ∷ []) ⋆
+    f 0 = Con Unit
+    f (suc n) = App (App (Con Prod) (Var VZ)) (f n)
