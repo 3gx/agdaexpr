@@ -18,6 +18,8 @@ map1 f x = repeat f ⊛ x
 map2 : {m : ℕ} {A B C : Set} → (A → B → C) → Vec A m → Vec B m → Vec C m
 map2 f x y = repeat f ⊛ x ⊛ y
 
+-- 3.1 Typing Arity-Generic Vector Map
+
 arrTy : { n : ℕ } → Vec Set (suc n) → Set
 arrTy {zero} (A :: []) = A
 arrTy {suc n} (A :: As) = A → arrTy As
@@ -54,3 +56,36 @@ _ : nvec-map (suc zero) {Bool :: (Bool :: [])} (λ x → ¬ x)
 _ = refl
 
 -- 3.2 - A curried vector map
+
+∀⇒ : {n : ℕ} → ((_ : Vec Set n) → Set) → Set
+∀⇒ {zero} B = B []
+∀⇒ {suc n} B = {a : Set} → ∀⇒ (λ as → B (a :: as))
+
+{- 
+λ⇒ : {n : ℕ} → {B : (_ : Vec Set n) → Set}
+             → ({X : Vec Set n} → B X) → (∀⇒ {n} B)
+λ⇒ {zero} f = f {[]}
+
+-- the following case doesn't typecheck ;(
+λ⇒ {suc n} f = λ {a : Set} → λ⇒ {n} (λ {as} → f {a :: as})
+-- λ⇒ {suc n} f = λ {a : Set} → λ⇒ {n} (λ {as} → f {a :: as})
+-}
+
+{-
+nmap : {m : ℕ} → (n : ℕ)
+        → ∀⇒(λ (As : Vec Set (suc n)) → arrTy As → arrTyVec m As)
+nmap {m} n = λ⇒ (λ {As} → nvec-map {m} n {As})
+-}
+
+{-
+_ : nmap (suc zero) (λ x → ¬ x)
+                              (true :: (false :: [])) ≡ 
+                              (false :: (true :: []))
+_ = refl
+
+_ : nmap (suc (suc zero)) (_,_) 
+                              (true :: (false :: []))
+                              (zero :: (suc zero :: [])) ≡
+                              ((true,zero) :: ((false, (suc zero)) :: []))
+_ = refl
+-}
