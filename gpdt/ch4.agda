@@ -203,3 +203,48 @@ eq-choice' fa fb (inj₁ (a1 , b1)) (inj₁ (a2 , b2)) = fa a1 a2 ∧ fb b1 b2
 eq-choice' fa fb (inj₂ (inj₁ a1)) (inj₂ (inj₁ a2)) = fa a1 a2
 eq-choice' fa fb (inj₂ (inj₂ (inj₁ b1))) (inj₂ (inj₂ (inj₁ b2))) = fb b1 b2
 eq-choice' fa fb _ _ = true
+
+geq-prod  : ∀ {A} → (A → A → Bool) → ∀{B} → (B → B → Bool)
+                  → (A × B) → (A × B) → Bool
+geq-prod ra rb ( x₁ , x₂ ) (y₁ , y₂) = ra x₁ y₁ ∧ rb x₂ y₂
+
+geq-sum   : ∀ {A} → (A → A → Bool) → ∀ {B} → (B → B → Bool)
+                  → (A ⊎ B) → (A ⊎ B) → Bool
+geq-sum ra rb (inj₁ x₁) (inj₁ x₂) = ra x₁ x₂
+geq-sum ra rb (inj₂ x₁) (inj₂ x₂) = rb x₁ x₂
+geq-sum _ _ _ _  = false
+
+geq-c : {k : Kind} → (c : Const k) → Eq ⟨ k ⟩ ⌊ Con c ⌋
+geq-c Unit  = λ t1 t2 → true
+geq-c Sum   = geq-sum 
+geq-c Prod  = geq-prod
+
+data VarEnv  (b : Set → Set) : Ctx → Set where
+   [] : VarEnv b []
+   _∷_ : {k : Kind} {Γ : Ctx} {a : ⟦ k ⟧}
+          → b ⟨ k ⟩ a  → VarEnv b Γ → VarEnv b (k ∷ Γ)
+
+toEnv : {Γ : Ctx} { b : Set → Set} → VarEnv b Γ → Env Γ
+toEnv [] = []
+toEnv (_∷_ {_}{_}{a} _ r) = a ∷ toEnv r
+
+vLookup : ∀ {Γ k} {b : Set → Set} → (v : V Γ k) → (ve : VarEnv b Γ)
+                                 → b ⟨ k ⟩ (sLookup v (toEnv ve))
+vLookup VZ     (v ∷ ve) = v
+vLookup (VS x) (v ∷ ve) = vLookup x ve
+
+geq-mu    : ∀ {A} → Eq (A (μ A)) → Eq (μ A)
+geq-mu f  = λ x y -> f (unroll x) (unroll y)
+
+geq-open : {Γ : Ctx} {k : Kind} → (ve : VarEnv Eq Γ)
+                                → (t : Typ Γ k)
+                                → Eq ⟨ k ⟩ (interp t (toEnv ve))
+geq-open ve (Var v)     = vLookup v ve
+geq-open ve (Lam t)     = λ y → geq-open (y ∷ ve) t
+geq-open ve (App t1 t2) = (geq-open ve t1) (geq-open ve t2)
+geq-open ve (Mu t)      = geq-mu (geq-open ve (App t (Mu t)))
+geq-open ve (Con c)     = geq-c c  
+
+geq : {k : Kind} → (t : Ty k) → Eq ⟨ k ⟩ ⌊ t ⌋
+geq t = geq-open [] t
+
