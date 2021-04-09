@@ -179,3 +179,27 @@ _⟨_⟩_ : (Set → Set) → (k : Kind) → ⟦ k ⟧ → Set
 b ⟨ ⋆ ⟩ t = b t
 b ⟨ k1 ⇒ k2 ⟩ t = ∀ {A} → b ⟨ k1 ⟩ A → b ⟨ k2 ⟩ (t A)
 
+Eq : Set → Set
+Eq A = A → A → Bool
+
+eq-bool' : Eq ⟨ ⋆ ⟩ Bool
+    -- Bool → Bool → Bool
+eq-bool' true true = true
+eq-bool' false false = true
+eq-bool' _ _ = false
+
+{- doesn't typecheck
+eq-list' : Eq ⟨ ⋆ ⇒ ⋆ ⟩ MyList
+    -- ∀ A → (A → A → Bool) → (MyList A → MyList A → Bool)
+eq-list' f nil nil = true
+eq-list' f (a ∷ as) (b ∷ bs) = f a b ∧ eq-list f as bs
+eq-list' f _ _ = false
+-}
+
+eq-choice' : Eq ⟨ ⋆ ⇒ ⋆ ⇒ ⋆ ⟩ Choice
+    -- ∀ A → (A → A → Bool) → ∀ B → (B → B → Bool)
+    --     → (Choice A B → Choice A B → Bool)
+eq-choice' fa fb (inj₁ (a1 , b1)) (inj₁ (a2 , b2)) = fa a1 a2 ∧ fb b1 b2
+eq-choice' fa fb (inj₂ (inj₁ a1)) (inj₂ (inj₁ a2)) = fa a1 a2
+eq-choice' fa fb (inj₂ (inj₂ (inj₁ b1))) (inj₂ (inj₂ (inj₁ b2))) = fb b1 b2
+eq-choice' fa fb _ _ = true
